@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Mis sesiones de estudio</h2>
+    <a href="{% url 'sesion_crear' %}" class="btn btn-primary">Nueva sesión</a>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text" name="materia" value="{{ materia }}" class="form-control" placeholder="Materia">
+    </div>
+    <div class="col-md-3">
+        <select name="estado" class="form-select">
+            <option value="">Todas</option>
+            <option value="1" {% if estado == '1' %}selected{% endif %}>Completadas</option>
+            <option value="0" {% if estado == '0' %}selected{% endif %}>Pendientes</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <input type="date" name="desde" value="{{ desde }}" class="form-control">
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-secondary w-100">Filtrar</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr><th>Título</th><th>Materia</th><th>Fecha</th><th>Min</th><th>Estado</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for s in page_obj %}
+        <tr>
+            <td>{{ s.titulo }}</td>
+            <td>{{ s.materia }}</td>
+            <td>{{ s.fecha|date:"d/m/Y" }}</td>
+            <td>{{ s.duracion_minutos }}</td>
+            <td>{% if s.completada %}Completada{% else %}Pendiente{% endif %}</td>
+            <td class="text-end">
+                <a href="{% url 'sesion_detalle' s.pk %}" class="btn btn-sm btn-info">Ver</a>
+                <a href="{% url 'sesion_editar' s.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'sesion_eliminar' s.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6" class="text-center">No hay registros.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">Anterior</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">Siguiente</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}

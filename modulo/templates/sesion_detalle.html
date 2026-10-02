@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ sesion.titulo }}</h2>
+<ul class="list-group mb-3">
+    <li class="list-group-item"><b>Materia:</b> {{ sesion.materia }}</li>
+    <li class="list-group-item"><b>Fecha:</b> {{ sesion.fecha|date:"d/m/Y" }}</li>
+    <li class="list-group-item"><b>Duración:</b> {{ sesion.duracion_minutos }} min</li>
+    <li class="list-group-item"><b>Estado:</b> {% if sesion.completada %}Completada{% else %}Pendiente{% endif %}</li>
+    <li class="list-group-item"><b>Notas:</b> {{ sesion.notas|default:"—" }}</li>
+</ul>
+<a href="{% url 'sesion_editar' sesion.pk %}" class="btn btn-warning">Editar</a>
+<a href="{% url 'sesion_lista' %}" class="btn btn-secondary">Volver</a>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>¿Eliminar "{{ sesion.titulo }}"?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'sesion_lista' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
